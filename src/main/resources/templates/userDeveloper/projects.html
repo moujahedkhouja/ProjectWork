@@ -1,0 +1,89 @@
+<!--
+TODO
+Currently a click on a cards either collapses all cards or none of them.
+In my opinion it would be nicer if only the clicked card collapses.
+I already managed  to achieve this in the html-file  "users.html" in the userManager-folder
+
+TODO
+Find a more elegant way to add a task
+-->
+
+<!doctype html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<header th:insert="fragments/header"></header>
+<body>
+
+
+<main role="main">
+
+    <div class="container marketing">
+
+        <!--Section for developers-->
+        <div sec:authorize="hasRole('DEVELOPER')">
+            <h1>Projects</h1>
+            <div class="form-group">
+                <div th:if="${projects != null}" id="accordion">
+                    <div th:each="project : ${projects}">
+                        <div class='card'>
+                            <div class='card-header'>
+                                <h5 class='mb-0'>
+                                    <button th:text="${project.name}" class='btn btn-link' data-toggle='collapse' data-target='#collapse_' aria-expanded='false' aria-controls='collapseOne'>
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id='collapse_' class='collapse show' aria-labelledby='headingOne' data-parent='#accordion'>
+                                <div class='card-body'>
+                                    <h4>Tasks in this project</h4>
+                                    <table th:if="${project.tasks != null}" class="table">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Status</th>
+                                            <th>Estimation</th>
+                                            <th>Time spent on task</th>
+                                        </tr>
+                                        <tr th:each="task : ${project.tasks}">
+                                            <td>
+                                                <a th:href="@{'/userDeveloper/viewTask/' + ${task.id}}" th:text="${task.name}"></a>
+                                            </td>
+                                            <td th:text="${task.status}"></td>
+                                            <td th:text="${task.estimation}"></td>
+                                            <td th:text="${task.totalTime}"></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <form th:action="@{/userDeveloper/addTask}">
+                                                    <input type="hidden" th:value="${project.id}" th:name="projectId">
+                                                    <button type="submit"  class="btn btn-outline-primary">Add Task</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <div th:text="'You already spent ' + ${project.usersTimeSpentInProject} + ' hours on this project.'"></div>
+                                    <br><br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br><br><br><br><br>
+        </div>
+
+    </div><!-- /.container -->
+
+    <!-- FOOTER -->
+    <footer th:insert="fragments/footer"></footer>
+</main>
+
+</body>
+</html>

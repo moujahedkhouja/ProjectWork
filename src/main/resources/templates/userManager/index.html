@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<header th:insert="fragments/header"></header>
+<body>
+
+
+<main role="main">
+
+    <div class="container marketing">
+
+        <!--Section for managers-->
+        <div sec:authorize="hasRole('MANAGER')">
+            <h1>Dashboard</h1>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br<br><br><br><br><br><br><br><br>
+        </div>
+
+    </div><!-- /.container -->
+
+    <!-- FOOTER -->
+    <footer th:insert="fragments/footer"></footer>
+</main>
+
+</body>
+</html>

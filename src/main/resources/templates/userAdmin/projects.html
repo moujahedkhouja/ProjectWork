@@ -1,0 +1,64 @@
+<!--
+TODO
+Optimize the  "Create New Project"-Form
+-->
+
+
+<!doctype html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<header th:insert="fragments/header2"></header>
+<body>
+
+
+<main role="main">
+
+    <div class="container marketing">
+
+        <!--Section for admins-->
+        <div sec:authorize="hasRole('ADMIN')">
+            <h1>Projects</h1>
+            <table class="table">
+                <tr>
+                    <th>Name</th>
+                    <th>Members</th>
+                    <th></th>
+                </tr>
+                <tr th:each="project : ${projects}">
+                    <td th:text="${project.name}"></td>
+                    <td th:text="${project.members}"></td>
+                    <td>
+                        <form th:action="@{'/userAdmin/project/' + ${project.id}}">
+                            <button type="submit" class="btn btn-default">Edit Members</button>
+                        </form>
+                    </td>
+                </tr>
+            </table>
+            <br><br><br><br><br>
+
+            <h1>Create a new project</h1>
+            <form th:action="@{/userAdmin/createNewProject/}" th:object="${newProject}" method="post">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input th:field="${newProject.name}" class="form-control" id="name" placeholder="Name" required="required">
+                </div>
+                <div class="form-check">
+                    <div th:each="user : ${users}">
+                        <input th:field="${newProject.members}" th:value="${user.id}" class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                        <label th:text="${user.name}" class="form-check-label" for="defaultCheck1"></label>
+                    </div>
+                </div><br>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary mb-2">Create</button>
+                </div>
+            </form>
+            <br><br><br><br><br>
+        </div>
+
+    </div><!-- /.container -->
+
+    <!-- FOOTER -->
+    <footer th:insert="fragments/footer"></footer>
+</main>
+
+</body>
+</html>

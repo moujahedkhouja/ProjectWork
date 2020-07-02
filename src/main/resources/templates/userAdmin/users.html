@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+
+<header th:insert="fragments/header">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</header>
+
+<body>
+<div layout:fragment="content">
+
+    <div class="my-4">
+        <div th:replace="layout/menu :: menu"></div>
+    </div>
+
+    <!--Section for admins-->
+    <div sec:authorize="hasRole('ADMIN')">
+        <h1>Users</h1>
+        <table class="table">
+            <tr>
+                <th>Username</th>
+                <th>Projects</th>
+                <th>Role</th>
+                <th></th>
+            </tr>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.name}"></td>
+                <td>
+                    <span th:each="a, stat : ${user.projects}"
+                          th:text=" ${user.projects[__${stat.index}__].name} +  (${stat.size-1 > stat.index}? ', ':'') ">
+                    </span>
+                </td>
+                <td th:text="${user.role}"></td>
+                <td>
+                    <div th:if="${user.getRole() == 'DEVELOPER'}">
+                        <form th:action="@{/userAdmin/changeRole}" method="post">
+                            <div class="modal fade" id="modalChangeRoleDeveloper" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header text-center">
+                                            <h4 class="modal-title w-100 font-weight-bold">Change Role</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body mx-3">
+                                            <div th:if="${user.role} != 'MANAGER'" class="custom-control custom-radio">
+                                                <input th:value="MANAGER" th:name="role" type="radio" id="developerRadio1" name="customRadio" class="custom-control-input">
+                                                <label class="custom-control-label" for="developerRadio1">Manager</label>
+                                            </div>
+                                            <div th:if="${user.role} != 'ADMIN'" class="custom-control custom-radio">
+                                                <input th:value="ADMIN" th:name="role" type="radio" id="developerRadio2" name="customRadio" class="custom-control-input">
+                                                <label class="custom-control-label" for="developerRadio2">Admin</label>
+                                            </div>
+                                            <input type="hidden" class="userid" th:name="id">
+                                        </div>
+                                        <div class="modal-footer d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-default">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div>
+                            <button th:attr="data-userrole=${user.getRole()}, data-userid=${user.getId()}" data-toggle="modal" data-target="#modalChangeRoleDeveloper" class="btn btn-default">Change Role</button>
+                        </div>
+                    </div>
+                    <div th:if="${user.getRole() == 'ADMIN'}">
+                        <form th:action="@{/userAdmin/changeRole}" method="post">
+                            <div class="modal fade" id="modalChangeRoleAdmin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header text-center">
+                                            <h4 class="modal-title w-100 font-weight-bold">Change Role</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body mx-3">
+                                            <div class="custom-control custom-radio">
+                                                <input th:value="DEVELOPER" th:name="role" type="radio" id="adminRadio1" name="customRadio" class="custom-control-input">
+                                                <label class="custom-control-label" for="adminRadio1">Developer</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input th:value="MANAGER" th:name="role" type="radio" id="adminRadio2" name="customRadio" class="custom-control-input">
+                                                <label class="custom-control-label" for="adminRadio2">Manager</label>
+                                            </div>
+                                            <input type="hidden" class="userid" th:name="id">
+                                        </div>
+                                        <div class="modal-footer d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-default">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div>
+                            <button th:attr="data-userrole=${user.getRole()}, data-userid=${user.getId()}" data-toggle="modal" data-target="#modalChangeRoleAdmin" class="btn btn-default">Change Role</button>
+                        </div>
+                    </div>
+                    <div th:if="${user.getRole() == 'MANAGER'}">
+                        <form th:action="@{/userAdmin/changeRole}" method="post">
+                            <div class="modal fade" id="modalChangeRoleManager" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header text-center">
+                                            <h4 class="modal-title w-100 font-weight-bold" th:name="bla">Change Role</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body mx-3">
+                                            <div th:if="${user.role} != 'DEVELOPER'" class="custom-control custom-radio">
+                                                <input th:value="DEVELOPER" th:name="role" type="radio" id="managerRadio1" name="customRadio" class="custom-control-input">
+                                                <label class="custom-control-label" for="managerRadio1">Developer</label>
+                                            </div>
+                                            <div th:if="${user.role} != 'ADMIN'" class="custom-control custom-radio">
+                                                <input th:value="ADMIN" th:name="role" type="radio" id="managerRadio2" name="customRadio" class="custom-control-input">
+                                                <label class="custom-control-label" for="managerRadio2">Admin</label>
+                                            </div>
+                                            <input type="hidden" class="userid" th:name="id">
+                                        </div>
+                                        <div class="modal-footer d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-default">Save</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div>
+                            <button th:attr="data-userrole=${user.getRole()}, data-userid=${user.getId()}" data-toggle="modal" data-target="#modalChangeRoleManager" class="btn btn-default">Change Role</button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <br><br><br><br><br>
+
+        <script>
+            $('#modalChangeRoleDeveloper').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var userid = button.data('userid') // Extract info from data-* attributes
+                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                var modal = $(this)
+                modal.find('.userid').val(userid);
+            })
+            $('#modalChangeRoleAdmin').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var userid = button.data('userid') // Extract info from data-* attributes
+                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                var modal = $(this)
+                modal.find('.userid').val(userid);
+            })
+            $('#modalChangeRoleManager').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget) // Button that triggered the modal
+                var userid = button.data('userid') // Extract info from data-* attributes
+                // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                var modal = $(this)
+                modal.find('.userid').val(userid);
+            })
+        </script>
+        <br><br><br><br><br>
+
+    </div>
+
+    <p class="small">
+        <a href="/journals/">Index</a>
+    </p>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+</html>
+
+
+
+<!--<!doctype html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<header th:insert="fragments/header2"></header>
+<body>
+
+
+<main role="main">
+
+    <div class="container marketing">
+
+        <div sec:authorize="hasRole('ADMIN')">
+            <h1>Users</h1>
+            <table class="table">
+                <tr>
+                    <th>Username</th>
+                    <th>Projects</th>
+                    <th>Role</th>
+                    <th></th>
+                </tr>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.name}"></td>
+                    <td>
+                    <span th:each="a, stat : ${user.projects}"
+                          th:text=" ${user.projects[__${stat.index}__].name} +  (${stat.size-1 > stat.index}? ', ':'') ">
+                    </span>
+                    </td>
+                    <td th:text="${user.role}"></td>
+                    <td>
+                        <div th:if="${user.getRole() == 'DEVELOPER'}">
+                            <form th:action="@{/userAdmin/changeRole}" method="post">
+                                <div class="modal fade" id="modalChangeRoleDeveloper" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header text-center">
+                                                <h4 class="modal-title w-100 font-weight-bold">Change Role</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body mx-3">
+                                                <div th:if="${user.role} != 'MANAGER'" class="custom-control custom-radio">
+                                                    <input th:value="MANAGER" th:name="role" type="radio" id="developerRadio1" name="customRadio" class="custom-control-input">
+                                                    <label class="custom-control-label" for="developerRadio1">Manager</label>
+                                                </div>
+                                                <div th:if="${user.role} != 'ADMIN'" class="custom-control custom-radio">
+                                                    <input th:value="ADMIN" th:name="role" type="radio" id="developerRadio2" name="customRadio" class="custom-control-input">
+                                                    <label class="custom-control-label" for="developerRadio2">Admin</label>
+                                                </div>
+                                                <input type="hidden" class="userid" th:name="id">
+                                            </div>
+                                            <div class="modal-footer d-flex justify-content-center">
+                                                <button type="submit" class="btn btn-default">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div>
+                                <button th:attr="data-userrole=${user.getRole()}, data-userid=${user.getId()}" data-toggle="modal" data-target="#modalChangeRoleDeveloper" class="btn btn-default">Change Role</button>
+                            </div>
+                        </div>
+                        <div th:if="${user.getRole() == 'ADMIN'}">
+                            <form th:action="@{/userAdmin/changeRole}" method="post">
+                                <div class="modal fade" id="modalChangeRoleAdmin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header text-center">
+                                                <h4 class="modal-title w-100 font-weight-bold">Change Role</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body mx-3">
+                                                <div class="custom-control custom-radio">
+                                                    <input th:value="DEVELOPER" th:name="role" type="radio" id="adminRadio1" name="customRadio" class="custom-control-input">
+                                                    <label class="custom-control-label" for="adminRadio1">Developer</label>
+                                                </div>
+                                                <div class="custom-control custom-radio">
+                                                    <input th:value="MANAGER" th:name="role" type="radio" id="adminRadio2" name="customRadio" class="custom-control-input">
+                                                    <label class="custom-control-label" for="adminRadio2">Manager</label>
+                                                </div>
+                                                <input type="hidden" class="userid" th:name="id">
+                                            </div>
+                                            <div class="modal-footer d-flex justify-content-center">
+                                                <button type="submit" class="btn btn-default">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div>
+                                <button th:attr="data-userrole=${user.getRole()}, data-userid=${user.getId()}" data-toggle="modal" data-target="#modalChangeRoleAdmin" class="btn btn-default">Change Role</button>
+                            </div>
+                        </div>
+                        <div th:if="${user.getRole() == 'MANAGER'}">
+                            <form th:action="@{/userAdmin/changeRole}" method="post">
+                                <div class="modal fade" id="modalChangeRoleManager" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header text-center">
+                                                <h4 class="modal-title w-100 font-weight-bold" th:name="bla">Change Role</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body mx-3">
+                                                <div th:if="${user.role} != 'DEVELOPER'" class="custom-control custom-radio">
+                                                    <input th:value="DEVELOPER" th:name="role" type="radio" id="managerRadio1" name="customRadio" class="custom-control-input">
+                                                    <label class="custom-control-label" for="managerRadio1">Developer</label>
+                                                </div>
+                                                <div th:if="${user.role} != 'ADMIN'" class="custom-control custom-radio">
+                                                    <input th:value="ADMIN" th:name="role" type="radio" id="managerRadio2" name="customRadio" class="custom-control-input">
+                                                    <label class="custom-control-label" for="managerRadio2">Admin</label>
+                                                </div>
+                                                <input type="hidden" class="userid" th:name="id">
+                                            </div>
+                                            <div class="modal-footer d-flex justify-content-center">
+                                                <button type="submit" class="btn btn-default">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div>
+                                <button th:attr="data-userrole=${user.getRole()}, data-userid=${user.getId()}" data-toggle="modal" data-target="#modalChangeRoleManager" class="btn btn-default">Change Role</button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <br><br><br><br><br>
+
+            <script>
+                $('#modalChangeRoleDeveloper').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget) // Button that triggered the modal
+                    var userid = button.data('userid') // Extract info from data-* attributes
+                    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                    var modal = $(this)
+                    modal.find('.userid').val(userid);
+                })
+                $('#modalChangeRoleAdmin').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget) // Button that triggered the modal
+                    var userid = button.data('userid') // Extract info from data-* attributes
+                    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                    var modal = $(this)
+                    modal.find('.userid').val(userid);
+                })
+                $('#modalChangeRoleManager').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget) // Button that triggered the modal
+                    var userid = button.data('userid') // Extract info from data-* attributes
+                    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+                    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+                    var modal = $(this)
+                    modal.find('.userid').val(userid);
+                })
+            </script>
+            <br><br><br><br><br>
+
+        </div>
+
+    </div>
+
+    <footer th:insert="fragments/footer"></footer>
+</main>
+
+</body>
+</html>
+-->
