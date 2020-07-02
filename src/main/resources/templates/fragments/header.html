@@ -150,8 +150,53 @@
     </style>
 </head>
 
+<body>
+<div class="container bg-light">
+    <header class="blog-header py-3">
+        <div class="row flex-nowrap justify-content-between align-items-center">
+            <h5 class="my-0 mr-md-auto font-weight-normal">Project Management</h5>
+            <div sec:authorize="authenticated" class="dropdown">
+                <button class="btn btn-default" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Dashboard
+                </button>
+                <div sec:authorize="hasRole('ADMIN')" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" th:href="@{/userAdmin/}">Dashboard</a>
+                    <a class="dropdown-item" th:href="@{/userAdmin/users/}">Users</a>
+                    <a class="dropdown-item" th:href="@{/userAdmin/projects/}">Projects</a>
+                </div>
+                <div sec:authorize="hasRole('DEVELOPER')" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" th:href="@{/userDeveloper/}">Dashboard</a>
+                    <a class="dropdown-item" th:href="@{/userDeveloper/projects/}">Projects</a>
+                    <a class="dropdown-item" href="#">Tasks</a>
+                </div>
+                <div sec:authorize="hasRole('MANAGER')" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" th:href="@{/userManager/}">Dashboard</a>
+                    <a class="dropdown-item" th:href="@{/userManager/users}">Users</a>
+                    <a class="dropdown-item" th:href="@{/userManager/projects}">Projects</a>
+                    <a class="dropdown-item" th:href="@{/userManager/tasks}">Tasks</a>
+                </div>
+            </div>
+            <a sec:authorize="authenticated" th:href="@{/account}" class="p-2 text-dark">Account</a>
+            <a sec:authorize="anonymous" name="login">
+                <form class="float-right" method="post" th:href="@{/login}">
+                    <button class="btn btn-default" type="submit">Login</button>
+                </form>
+            </a>
+            <a sec:authorize="authenticated" name="logout">
+                <form class="float-right" method="post" th:action="@{/logout}">
+                    <button class="btn btn-default" type="submit">Logout</button>
+                </form>
+            </a>
+        </div>
+    </header>
+</div>
+<br><br>
+</body>
 
-<header>
+</html>
+
+
+<!--<header>
     <div class="navbar navbar-expand-md navbar-dark fixed-top bg-light">
         <h5 class="my-0 mr-md-auto font-weight-normal">
             <a th:href="@{/}">Project Management</a>
@@ -189,6 +234,4 @@
             </form>
         </a>
     </div><br><br>
-</header>
-
-</html>
+</header>-->

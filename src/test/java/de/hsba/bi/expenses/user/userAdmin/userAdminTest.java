@@ -1,11 +1,10 @@
 package de.hsba.bi.expenses.user.userAdmin;
 
-import de.hsba.bi.expenses.user.UserRepository;
-import de.hsba.bi.expenses.user.UserService;
-import de.hsba.bi.expenses.user.admin.UserAdminService;
+import de.hsba.bi.projectWork.user.UserRepository;
+import de.hsba.bi.projectWork.user.UserService;
+import de.hsba.bi.projectWork.user.admin.UserAdminService;
 import org.junit.jupiter.api.Test;
 
-import de.hsba.bi.expenses.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

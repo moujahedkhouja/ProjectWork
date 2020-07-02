@@ -13,7 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoSettings;
 
-import de.hsba.bi.expenses.user.User;
+import de.hsba.bi.projectWork.user.User;
 
 @MockitoSettings
 class JournalServiceUnitTest {

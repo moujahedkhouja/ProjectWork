@@ -1,10 +1,3 @@
-<!--
-TODO
-Currently a click on a cards either collapses all cards or none of them.
-In my opinion it would be nicer if only the clicked card collapses.
-I already managed  to achieve this in the html-file  "users.html" in the userManager-folder
--->
-
 <!doctype html>
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <header th:insert="fragments/header"></header>
@@ -24,11 +17,11 @@ I already managed  to achieve this in the html-file  "users.html" in the userMan
                         <div class='card'>
                             <div class='card-header'>
                                 <h5 class='mb-0'>
-                                    <button th:text="${project.name}" class='btn btn-link' data-toggle='collapse' data-target='#collapse_' aria-expanded='false' aria-controls='collapseOne'>
+                                    <button th:text="${project.name}" th:attr="data-target='#collapse'+${project.getId()}, aria-controls='collapse'+${project.getId()}" class='btn btn-link' data-toggle='collapse' aria-expanded='false'>
                                     </button>
                                 </h5>
                             </div>
-                            <div id='collapse_' class='collapse show' aria-labelledby='headingOne' data-parent='#accordion'>
+                            <div th:id="'collapse'+${project.getId()}" class='collapse show' aria-labelledby='headingOne' data-parent='#accordion'>
                                 <div class='card-body'>
                                     <h4>Tasks in this project</h4>
                                     <table th:if="${project.tasks != null}" class="table">
