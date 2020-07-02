@@ -23,7 +23,6 @@ public class UserDeveloperController {
     private final UserDeveloperService userDeveloperService;
     private final ProjectService projectService;
     private final TaskService taskService;
-    private final TaskFormConverter taskFormConverter;
 
     // dashboard
     @GetMapping
@@ -35,6 +34,7 @@ public class UserDeveloperController {
     // Als Entwickler in einem Projekt kann ich eine Aufgabe zu diesem Projekt hinzufügen, diese beinhaltet wenigstens einen Titel und eine Beschreibung
     @GetMapping("/projects")
     public String viewProjects(Model model) {
+        // TODO Als Entwickler in einem Projekt kann ich sehen, wieviel Zeit ich insgesamt (aufgabenübergreifend) gebucht habe (allerdings nicht die Zeiten anderer Entwickler)
         model.addAttribute("projects", projectService.findUsersProjects());
         return "userDeveloper/projects";
     }
@@ -70,8 +70,7 @@ public class UserDeveloperController {
         if (bindingResult.hasErrors()) {
             return "redirect:/userDeveloper/viewTask/"+taskId;
         }
-        Task task = taskService.findById(taskId);
-        taskService.save(taskFormConverter.update(task, form));
+        userDeveloperService.editTask(taskId, form);
         return "redirect:/userDeveloper/viewTask/"+taskId;
     }
 

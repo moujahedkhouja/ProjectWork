@@ -8,6 +8,7 @@ import de.hsba.bi.projectWork.task.TaskService;
 import de.hsba.bi.projectWork.user.User;
 import de.hsba.bi.projectWork.user.UserService;
 import de.hsba.bi.projectWork.user.manager.UserManagerService;
+import de.hsba.bi.projectWork.web.task.TaskForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,7 +45,11 @@ public class UserManagerController {
     @GetMapping("/viewTask/{taskId}")
     public String viewTask(@PathVariable("taskId") Long taskId, Model model) {
         Task task = taskService.findById(taskId);
+        task.calcTotalTime();
         model.addAttribute("task", task);
+        model.addAttribute("taskForm", new TaskForm());
+        model.addAttribute("project", projectService.findById(task.getProject().getId()));
+        model.addAttribute("remainingStatuses", taskService.findRemainingStatuses(taskId));
         return "userManager/viewTask";
     }
 

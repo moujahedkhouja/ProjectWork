@@ -5,6 +5,8 @@ import de.hsba.bi.projectWork.project.ProjectRepository;
 import de.hsba.bi.projectWork.project.ProjectService;
 import de.hsba.bi.projectWork.task.*;
 import de.hsba.bi.projectWork.user.UserService;
+import de.hsba.bi.projectWork.web.task.TaskForm;
+import de.hsba.bi.projectWork.web.task.TaskFormConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,13 +20,13 @@ import java.util.List;
 @Transactional
 public class UserDeveloperService {
 
-    private final UserDeveloperRepository userDeveloperRepository;
     private final UserService userService;
     private final ProjectRepository projectRepository;
     private final ProjectService projectService;
     private final TaskRepository taskRepository;
     private final BookingRepository bookingRepository;
     private final TaskService taskService;
+    private final TaskFormConverter taskFormConverter;
 
     public void addNewTask(Task task, Long projectId) {
         // TODO Als Entwickler in einem Projekt kann ich eine Aufgabe zu diesem Projekt hinzufügen, diese beinhaltet wenigstens einen Titel und eine Beschreibung
@@ -41,19 +43,11 @@ public class UserDeveloperService {
         }
     }
 
-    public void editTask(Task task, Long projectId) {
-        //task.setProject(projectService.findById(projectId));
-        //taskRepository.save(task);
-    }
-
-    public boolean addEstimation(Task task, double estimation) {
+    public void editTask(Long taskId, TaskForm form) {
         // TODO Als Entwickler in einem Projekt kann ich eine Zeitschätzung (grob in Stunden) in einer Aufgabe speichern (diese Schätzung soll eine Eigenschaft der Aufgabe sein - verschiedene Entwickler würden diese Schätzung sehen und ändern dürfen)
-        return false;
-    }
-
-    public boolean changeStatus(Task task, String newStatus) {
         // TODO Als Entwickler in einem Projekt kann ich den Status einer Aufgabe ändern (Idee, Geplant, in Bearbeitung, im Test, Fertig)
-        return false;
+        Task task = taskService.findById(taskId);
+        taskService.save(taskFormConverter.update(task, form));
     }
 
     public void bookTime(Long taskId, Long projectId, double timeSpent, String date) {
@@ -76,11 +70,6 @@ public class UserDeveloperService {
         projectRepository.save(project);
     }
 
-    public double getTotalTime(Task task) {
-        // TODO Als Entwickler in einem Projekt kann ich sehen, wieviel Zeit ich insgesamt (aufgabenübergreifend) gebucht habe (allerdings nicht die Zeiten anderer Entwickler)
-        return 0.0;
-    }
-
     public boolean checkStatusValidity(Task task) {
         switch (task.getStatus()) {
             case "Idea":
@@ -97,7 +86,5 @@ public class UserDeveloperService {
                 return false;
         }
     }
-
-
 
 }
