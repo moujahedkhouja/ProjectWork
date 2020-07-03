@@ -7,7 +7,6 @@ import de.hsba.bi.projectWork.task.Task;
 import de.hsba.bi.projectWork.task.TaskService;
 import de.hsba.bi.projectWork.user.User;
 import de.hsba.bi.projectWork.user.UserService;
-import de.hsba.bi.projectWork.user.manager.UserManagerService;
 import de.hsba.bi.projectWork.web.task.TaskForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,7 +21,6 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 public class UserManagerController {
 
-    private final UserManagerService userManagerService;
     private final UserService userService;
     private final TaskService taskService;
     private final BookingService bookingService;
@@ -57,7 +55,7 @@ public class UserManagerController {
     public String deleteBookedTime(@RequestParam("taskId") Long taskId, @RequestParam("bookingId") Long bookingId) {
         Task task = taskService.findById(taskId);
         Booking booking = bookingService.findById(bookingId);
-        userManagerService.deleteBookedTime(task, booking);
+        bookingService.deleteBookedTime(task, booking);
         return "redirect:/userManager/viewTask/"+taskId;
     }
 
@@ -67,7 +65,7 @@ public class UserManagerController {
     public String viewTasks(@RequestParam(value = "status", required = false) String status, Model model) {
         if (status != null) {
             if (status.equals("Idea") || status.equals("Planned") || status.equals("wip") || status.equals("Testing") || status.equals("Done")) {
-                model.addAttribute("tasks", taskService.findByStatus(status));
+                model.addAttribute("tasks", taskService.findTasksByStatus(status));
             }
         }
         else {
@@ -88,7 +86,7 @@ public class UserManagerController {
     // Als Manager kann ich eine Statistik einsehen, bei der die geschätzten und gebuchten Zeiten gegenübergestellt werden
     @PostMapping("/compareEstimatedAndBookedTimes")
     public String compareEstimatedAndBookedTimes() {
-        HashMap<User, Task> comparison = userManagerService.compareEstimatedAndBookedTimes();
+        HashMap<User, Task> comparison = bookingService.compareEstimatedAndBookedTimes();
         return "redirect:/userManager";
     }
 

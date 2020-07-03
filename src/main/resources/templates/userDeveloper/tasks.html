@@ -1,0 +1,96 @@
+<!--
+TODO
+When a status is selected from the drop down menu, the title of the drop down menu
+doesn't change according to the selection, it always remains "All Statuses"
+
+I tried fixing this with the help of stack overflow and some javascript (commented out)
+https://stackoverflow.com/questions/13437446/how-to-display-selected-item-in-bootstrap-button-dropdown-title
+and it worked until I added the th:href that gets the data from the controller.
+
+If you think its important that the title of the button changes, you might have another try in fixing this...
+
+May be this helps:
+https://www.youtube.com/watch?v=JAADtLFJJgs
+-->
+
+<!doctype html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<header th:insert="fragments/header"></header>
+<body>
+
+
+<main role="main">
+
+    <div class="container marketing">
+
+        <!--Section for managers-->
+        <div sec:authorize="hasRole('DEVELOPER')">
+            <h1>Tasks</h1><br>
+            <table class="table">
+                <tr>
+                    <th>Name</th>
+                    <th>Project</th>
+                    <th>
+                        <!--This version works-->
+                        <div class="btn-group">
+                            <a type="button" class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
+                                <span class="selection">Show All</span>
+                            </a>
+                            <div class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" th:href="@{'/userDeveloper/tasks'}">Show All</a>
+                                <a class="dropdown-item" th:href="@{'/userDeveloper/tasks?status=Idea'}">Idea</a>
+                                <a class="dropdown-item" th:href="@{'/userDeveloper/tasks?status=Planned'}">Planned</a>
+                                <a class="dropdown-item" th:href="@{'/userDeveloper/tasks?status=wip'}">Work in Progress</a>
+                                <a class="dropdown-item" th:href="@{'/userDeveloper/tasks?status=Testing'}">Testing</a>
+                                <a class="dropdown-item" th:href="@{'/userDeveloper/tasks?status=Done'}">Done</a>
+                            </div>
+                        </div>
+                        <!--<div>
+                            <form th:action="@{'/userManager/tasks'}" method="get">
+                                <select th:selected="" name="status" id="status" onchange="this.form.submit()">
+                                    <option value="Idea">Idea</option>
+                                    <option value="Planned">Planned</option>
+                                    <option value="wip">Work in Progress</option>
+                                    <option value="Testing">Testing</option>
+                                    <option value="Done">Done</option>
+                                </select>
+                            </form>
+                        </div>-->
+                        <!--<div class="btn-group">
+                            <a type="button" class="dropdown-toggle" data-toggle="dropdown">
+                                <span class="selection">Option 1</span><span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a class="dropdown-item" th:href="@{'/userManager/tasks?status=Idea'}">Idea</a></li>
+                                <li><a class="dropdown-item" th:href="@{'/userManager/tasks?status=Planned'}">Planned</a></li>
+                                <li><a class="dropdown-item" th:href="@{'/userManager/tasks?status=wip'}">Work in Progress</a></li>
+                                <li><a class="dropdown-item" th:href="@{'/userManager/tasks?status=Testing'}">Testing</a></li>
+                                <li><a class="dropdown-item" th:href="@{'/userManager/tasks?status=Done'}">Done</a></li>
+                            </ul>
+                        </div>-->
+                    </th>
+                </tr>
+                <tr th:each="task : ${tasks}"> <!--th:value="${id}"-->
+                    <td th:text="${task.name}"></td>
+                    <td th:text="${task.project.getName()}"></td>
+                    <td th:text="${task.status}"></td>
+                </tr>
+            </table>
+            <!--<script>
+                $(".dropdown-menu li a").click(function(){
+                    $(this).parents(".btn-group").find('.selection').text($(this).text());
+                    $(this).parents(".btn-group").find('.selection').val($(this).text());
+                });
+            </script>-->
+            <br><br><br><br><br>
+
+        </div>
+
+    </div><!-- /.container -->
+
+    <!-- FOOTER -->
+    <footer th:insert="fragments/footer"></footer>
+</main>
+
+</body>
+</html>

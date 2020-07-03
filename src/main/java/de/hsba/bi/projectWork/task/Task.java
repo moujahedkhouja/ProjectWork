@@ -18,13 +18,13 @@ public class Task {
     private Long id;
     private String name;
     private String description;
-    //private Enum<Status> status;
-    private String status;
     private double estimation;
+    private double totalTime;
+    private String status;
+    //private Enum<Status> status;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "task")
     List<Booking> times;
-    private double totalTime;
 
     @ManyToOne(optional = false)
     private Project project;

@@ -4,12 +4,14 @@ import de.hsba.bi.projectWork.project.Project;
 import de.hsba.bi.projectWork.project.ProjectService;
 import de.hsba.bi.projectWork.user.User;
 import de.hsba.bi.projectWork.user.UserService;
-import de.hsba.bi.projectWork.user.admin.UserAdminService;
+import de.hsba.bi.projectWork.web.project.UpdateProjectForm;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.sql.Update;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserAdminController {
 
-    private final UserAdminService userAdminService;
     private final UserService userService;
     private final ProjectService projectService;
 
@@ -38,7 +39,7 @@ public class UserAdminController {
 
     @PostMapping("/changeRole")
     public String changeRole(@RequestParam("id") Long id, @RequestParam("role") String role) {
-        userAdminService.changeRole(id, role);
+        userService.changeRole(id, role);
         return "redirect:/userAdmin/users";
     }
 
@@ -49,25 +50,20 @@ public class UserAdminController {
         model.addAttribute("projects", projectService.findAll());
         model.addAttribute("newProject", new Project());
         model.addAttribute("users", userService.findAll());
+        model.addAttribute("updateProjectForm", new UpdateProjectForm());
         return "userAdmin/projects";
     }
 
-    @GetMapping("/project/{id}")
-    public String project(@PathVariable Long id, Model model) {
-        model.addAttribute("project", projectService.findById(id));
-        model.addAttribute("usersNotInProject", projectService.findUsersNotInProject(id));
-        return "userAdmin/project";
-    }
 
     @PostMapping("/addUserToProject")
-    public String addUserToProject(@RequestParam("projectId") Long projectId, @RequestParam("users") List<User> users) {
-        userAdminService.addUserToProject(projectId, users);
+    public String addUserToProject(@ModelAttribute("updateProjectForm") UpdateProjectForm updateProjectForm, @RequestParam("projectId") Long projectId) {
+        projectService.addUserToProject(updateProjectForm, projectId);
         return "redirect:/userAdmin/projects";
     }
 
     @PostMapping("/removeUserFromProject")
-    public String removeUserFromProject(@RequestParam("projectId") Long projectId, @RequestParam("users") List<User> users) {
-        userAdminService.removeUserFromProject(projectId, users);
+    public String removeUserFromProject(@ModelAttribute("updateProjectForm") UpdateProjectForm updateProjectForm, @RequestParam("projectId") Long projectId) {
+        projectService.removeUserFromProject(updateProjectForm, projectId);
         return "redirect:/userAdmin/projects";
     }
 
@@ -75,7 +71,7 @@ public class UserAdminController {
     // Als Admin kann ich ein neues Projekt anlegen
     @PostMapping("/createNewProject")
     public String createNewProject(@ModelAttribute("project") Project project) {
-        userAdminService.createNewProject(project);
+        projectService.save(project);
         return "redirect:/userAdmin/projects";
     }
 }

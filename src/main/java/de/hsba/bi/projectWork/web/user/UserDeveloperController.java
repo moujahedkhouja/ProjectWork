@@ -1,11 +1,10 @@
 package de.hsba.bi.projectWork.web.user;
 
 import de.hsba.bi.projectWork.project.ProjectService;
+import de.hsba.bi.projectWork.task.BookingService;
 import de.hsba.bi.projectWork.task.Task;
 import de.hsba.bi.projectWork.task.TaskService;
-import de.hsba.bi.projectWork.user.developer.UserDeveloperService;
 import de.hsba.bi.projectWork.web.task.TaskForm;
-import de.hsba.bi.projectWork.web.task.TaskFormConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,9 +19,9 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class UserDeveloperController {
 
-    private final UserDeveloperService userDeveloperService;
     private final ProjectService projectService;
     private final TaskService taskService;
+    private final BookingService bookingService;
 
     // dashboard
     @GetMapping
@@ -48,7 +47,7 @@ public class UserDeveloperController {
 
     @PostMapping("/addTask")
     public String addTask(@ModelAttribute("task") Task task, @RequestParam("projectId") Long projectId) {
-        userDeveloperService.addNewTask(task, projectId);
+        taskService.addNewTask(task, projectId);
         return "redirect:/userDeveloper/projects";
     }
 
@@ -70,7 +69,7 @@ public class UserDeveloperController {
         if (bindingResult.hasErrors()) {
             return "redirect:/userDeveloper/viewTask/"+taskId;
         }
-        userDeveloperService.editTask(taskId, form);
+        taskService.editTask(taskId, form);
         return "redirect:/userDeveloper/viewTask/"+taskId;
     }
 
@@ -78,8 +77,16 @@ public class UserDeveloperController {
     //  Als Entwickler in einem Projekt kann ich aufgewendete Zeiten für eine Aufgabe buchen (diese Buchung gilt pro Aufgabe und Entwickler, außerdem kann ein Entwickler mehrmals Zeiten buchen, wenn die Bearbeitung beispielsweise mehrere Tage dauert)
     @PostMapping("/bookTime")
     public String bookTime(@RequestParam("taskId") Long taskId, @RequestParam("projectId") Long projectId, @RequestParam("date") String date, @RequestParam("time") double time) {
-        userDeveloperService.bookTime(taskId, projectId, time, date);
+        bookingService.bookTime(taskId, projectId, time, date);
         return "redirect:/userDeveloper/viewTask/"+taskId;
+    }
+
+
+    // Als Entwickler oder Manager kann ich mir eine Liste der Aufgaben gefiltert nach Status anzeigen lassen.
+    @GetMapping("/tasks")
+    public String viewTasks(@RequestParam(value = "status", required = false) String status, Model model) {
+        model.addAttribute("tasks", taskService.findTasksByStatusAndUser(status));
+        return "userDeveloper/tasks";
     }
 
 }

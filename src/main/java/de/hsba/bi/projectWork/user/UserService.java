@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import de.hsba.bi.projectWork.project.Project;
+import de.hsba.bi.projectWork.project.ProjectService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
 
     public void init() {
         createUser("timo", "timospassword", User.ADMIN_ROLE);
@@ -33,6 +36,10 @@ public class UserService {
         createUser("Karl", "123456", User.MANAGER_ROLE);
         createUser("Johanna", "123456", User.MANAGER_ROLE);
         createUser("Tina", "123456", User.MANAGER_ROLE);
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
     }
 
     public void createUser(String name, String password, String role) {
@@ -58,5 +65,15 @@ public class UserService {
         return false;
     }
 
+    public boolean changeRole(Long id, String role) {
+        // TODO Als Admin kann ich die Rollen anderer Nutzer ändern
+        Optional<User> userOptional = userRepository.findById(id);
+        if(userOptional.isPresent()){
+            User user = userOptional.get();
+            user.setRole(role);
+            userRepository.save(user);
+        }
+        return false;
+    }
 
 }

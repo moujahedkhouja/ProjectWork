@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <header th:insert="fragments/header"></header>
 <body>
 
@@ -22,6 +22,7 @@
                         <a th:text="${user.name}" th:attr="data-target='#collapseExample'+${user.id}, aria-controls='collapseExample'+${user.id}" class="btn btn-default" type="button" data-toggle="collapse" aria-expanded="false"></a>
                         <div class="collapse" th:id="'collapseExample'+${user.id}">
                             <div class="card card-body">
+                                <!-- TODO Als Manager kann ich die gebuchten Zeiten aller Entwickler einsehen-->
                                 <div th:if="${user.getBookedTimes().size() > 0}">
                                     <div th:each="project : ${user.projects}">
                                         <div th:text="${project.name}"></div>
