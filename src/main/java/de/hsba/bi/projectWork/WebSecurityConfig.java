@@ -13,6 +13,9 @@ import de.hsba.bi.projectWork.user.User;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    /*@Autowired
+    private MyUserDetailsService userDetailsService;*/
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -35,6 +38,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/h2-console/**");
     }
+
+    /*@Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService);
+    }*/
 
     @Bean
     public PasswordEncoder passwordEncoder() {

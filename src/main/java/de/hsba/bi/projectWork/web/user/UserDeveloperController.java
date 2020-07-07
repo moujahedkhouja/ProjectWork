@@ -6,6 +6,7 @@ import de.hsba.bi.projectWork.task.Task;
 import de.hsba.bi.projectWork.task.TaskService;
 import de.hsba.bi.projectWork.web.task.TaskForm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/userDeveloper")
+@PreAuthorize("hasRole('ROLE_DEVELOPER')")
 @RequiredArgsConstructor
 public class UserDeveloperController {
 

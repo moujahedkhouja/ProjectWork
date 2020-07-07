@@ -1,14 +1,22 @@
 package de.hsba.bi.projectWork.web;
 
+import de.hsba.bi.projectWork.user.ChangePasswordForm;
 import de.hsba.bi.projectWork.user.User;
 import de.hsba.bi.projectWork.user.UserService;
+import de.hsba.bi.projectWork.web.exception.IncorrectPasswordException;
+import de.hsba.bi.projectWork.web.exception.UserAlreadyExistException;
+import de.hsba.bi.projectWork.user.RegisterUserForm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/")
@@ -39,16 +47,28 @@ public class IndexController {
         return auth instanceof AnonymousAuthenticationToken ? "login" : "redirect:/";
     }
 
+
     // Als Nutzer kann ich mich registrieren und bekomme standardmäßig die Rolle "Entwickler"
     @GetMapping("/register")
     public String registerForm(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new RegisterUserForm());
         return "register";
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("user") User user) {
-        userService.createUser(user.getName(), user.getPassword(), User.DEVELOPER_ROLE);
+    public String register(@ModelAttribute("user") @Valid RegisterUserForm userForm, BindingResult bindingResult, Model model) {
+        if (!bindingResult.hasErrors()) {
+            try {
+                User registered = userService.createUser(userForm);
+                model.addAttribute("user", userForm);
+                model.addAttribute("message", "You've successfully registered.");
+                return "login";
+            } catch (UserAlreadyExistException uaeEx) {
+                model.addAttribute("user", userForm);
+                return "register";
+            }
+        }
+        model.addAttribute("user", userForm);
         return "register";
     }
 
@@ -57,13 +77,30 @@ public class IndexController {
     @GetMapping("/account")
     public String account(Model model) {
         model.addAttribute("user", userService.findCurrentUser());
+        model.addAttribute("changePasswordForm", new ChangePasswordForm());
         return "account";
     }
 
+    @PreAuthorize("hasRole(authenticated)")
     @PostMapping("/changePassword")
-    public String changePassword(@RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword, @RequestParam("newPasswordConfirmation") String newPasswordConfirmation) {
-        userService.changePassword(oldPassword, newPassword, newPasswordConfirmation);
-        return "redirect:/account";
+    public String changePassword(@ModelAttribute("changePasswordForm") @Valid ChangePasswordForm changePasswordForm, BindingResult bindingResult, Model model) {
+        if (!bindingResult.hasErrors()) {
+            try {
+                ChangePasswordForm changedPassword = userService.changePassword(changePasswordForm);
+                model.addAttribute("user", userService.findCurrentUser());
+                model.addAttribute("changePasswordForm", changePasswordForm);
+                model.addAttribute("message", "You've successfully changed your password.");
+                return "account";
+            }
+            catch (IncorrectPasswordException ipEx) {
+                model.addAttribute("user", userService.findCurrentUser());
+                model.addAttribute("changePasswordForm", changePasswordForm);
+                return "account";
+            }
+        }
+        model.addAttribute("user", userService.findCurrentUser());
+        model.addAttribute("changePasswordForm", changePasswordForm);
+        return "account";
     }
 
 }

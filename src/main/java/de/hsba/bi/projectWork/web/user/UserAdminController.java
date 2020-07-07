@@ -7,6 +7,7 @@ import de.hsba.bi.projectWork.user.UserService;
 import de.hsba.bi.projectWork.web.project.UpdateProjectForm;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.sql.Update;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/userAdmin")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequiredArgsConstructor
 public class UserAdminController {
 

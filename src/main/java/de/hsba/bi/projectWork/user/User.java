@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,6 +31,14 @@ public class User implements Comparable<User> {
             return ((UserDetails) principal).getUsername();
         }
         return null;
+    }
+
+    public static List<String> getRoles() {
+        List<String> roles = new ArrayList<>();
+        roles.add(ADMIN_ROLE);
+        roles.add(DEVELOPER_ROLE);
+        roles.add(MANAGER_ROLE);
+        return roles;
     }
 
 

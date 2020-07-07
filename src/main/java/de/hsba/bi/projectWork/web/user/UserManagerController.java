@@ -9,6 +9,7 @@ import de.hsba.bi.projectWork.user.User;
 import de.hsba.bi.projectWork.user.UserService;
 import de.hsba.bi.projectWork.web.task.TaskForm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 
 @Controller
 @RequestMapping("/userManager")
+@PreAuthorize("hasRole('ROLE_MANAGER')")
 @RequiredArgsConstructor
 public class UserManagerController {
 

@@ -1,0 +1,98 @@
+<!--
+
+<!doctype html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<header th:insert="fragments/header"></header>
+<body>
+
+
+<main role="main">
+
+    <div class="container marketing">
+
+        <div sec:authorize="authenticated" th:object="${changePasswordForm}">
+            <h1>Account</h1>
+            <label class="text-danger small" th:if="${#fields.hasErrors('${user}')}" th:errors="${changePasswordForm}"></label>
+            <label class="text-danger small" th:errors="*{matchingPassword}"></label>
+            <label class="text-danger small" th:if="${#fields.hasErrors('${user}')}" th:errors="${changePasswordForm}"></label>
+            <label class="text-danger small" th:errors="*{password}"></label>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th scope="row">Name</th>
+                    <td th:text="${user.name}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Role</th>
+                    <td th:text="${user.role}"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Projects</th>
+                    <td>
+                        <span th:each="a, stat : ${user.projects}"
+                              th:text=" ${user.projects[__${stat.index}__].name} +  (${stat.size-1 > stat.index}? ', ':'') ">
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Change Password</th>
+                    <td>
+                        <div>
+                            <form th:action="@{/changePassword}" th:object="${changePasswordForm}" method="post">
+                                <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header text-center">
+                                                <h4 class="modal-title w-100 font-weight-bold">Change Password</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body mx-3">
+                                                <div class="md-form mb-4">
+                                                    <i class="fas fa-lock prefix grey-text"></i>
+                                                    <label data-error="wrong" data-success="right" for="oldPassword">Old Password</label>
+                                                    <label class="text-danger small" th:if="${#fields.hasErrors('${user}')}" th:errors="${changePasswordForm}"></label>
+                                                    <label class="text-danger small" th:errors="*{oldPassword}"></label>
+                                                    <input th:name="oldPassword" th:field="*{oldPassword}" type="password" id="oldPassword" class="form-control validate">
+                                                </div>
+                                                <div class="md-form mb-4">
+                                                    <i class="fas fa-lock prefix grey-text"></i>
+                                                    <label data-error="wrong" data-success="right" for="newPassword">New Password</label>
+                                                    <label class="text-danger small" th:if="${#fields.hasErrors('${user}')}" th:errors="${changePasswordForm}"></label>
+                                                    <label class="text-danger small" th:errors="*{password}"></label>
+                                                    <input th:name="newPassword" th:field="*{password}" type="password" id="newPassword" class="form-control validate">
+                                                </div>
+                                                <div class="md-form mb-4">
+                                                    <i class="fas fa-lock prefix grey-text"></i>
+                                                    <label data-error="wrong" data-success="right" for="confirmNewPassword">Confirm New Password</label>
+                                                    <label class="text-danger small" th:if="${#fields.hasErrors('${user}')}" th:errors="${changePasswordForm}"></label>
+                                                    <label class="text-danger small" th:errors="*{matchingPassword}"></label>
+                                                    <input th:name="newPasswordConfirmation" th:field="*{matchingPassword}" type="password" id="confirmNewPassword" class="form-control validate">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer d-flex justify-content-center">
+                                                <button type="submit" class="btn btn-default">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div><button data-toggle="modal" data-target="#modalLoginForm" data-backdrop="static" class="btn btn-outline-secondary">Change password</button></div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+    </div>
+
+    <footer th:insert="fragments/footer"></footer>
+</main>
+
+</body>
+</html>
+
+-->>

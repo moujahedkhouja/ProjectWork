@@ -75,7 +75,7 @@ public class TaskService {
 
     public List<String> findRemainingStatuses(Long taskId) {
         Task task = this.findById(taskId);
-        List<String> remainingStatuses = new ArrayList<String>();
+        List<String> remainingStatuses = new ArrayList<>();
         remainingStatuses.add("Idea");
         remainingStatuses.add("Planned");
         remainingStatuses.add("Work in progress");
