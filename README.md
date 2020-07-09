@@ -3,7 +3,7 @@
 
 <h2>Allgemein</h2>
 <ul>
-  <li>Es gibt wenigstens einen Admin-Nutzer, der vorher programmatisch angelegt wurde</li>
+  <li>Es gibt wenigstens einen Admin-Nutzer, der vorher programmatisch angelegt wurde&#9989;</li>
 </ul>
 <br>
 
