@@ -4,12 +4,12 @@
 <body>
 
 
-<main role="main">
+<div class="wrapper">
 
     <div class="container marketing">
 
         <div sec:authorize="authenticated" th:object="${changePasswordForm}">
-        <h1>Account</h1>
+        <h1>Account</h1><br>
 
             <div class="container">
                 <div class="row">
@@ -125,9 +125,10 @@
 
     </div>
 
-    <!-- FOOTER -->
-    <footer th:insert="fragments/footer"></footer>
-</main>
+</div>
+
+<!-- FOOTER -->
+<footer th:insert="fragments/footer"></footer>
 
 </body>
 </html>

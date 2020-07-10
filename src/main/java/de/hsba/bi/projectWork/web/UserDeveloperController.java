@@ -1,9 +1,10 @@
-package de.hsba.bi.projectWork.web.user;
+package de.hsba.bi.projectWork.web;
 
 import de.hsba.bi.projectWork.project.ProjectService;
 import de.hsba.bi.projectWork.task.BookingService;
 import de.hsba.bi.projectWork.task.Task;
 import de.hsba.bi.projectWork.task.TaskService;
+import de.hsba.bi.projectWork.user.UserService;
 import de.hsba.bi.projectWork.web.task.TaskForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +22,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class UserDeveloperController {
 
+    private final UserService userService;
     private final ProjectService projectService;
     private final TaskService taskService;
     private final BookingService bookingService;
@@ -78,8 +80,8 @@ public class UserDeveloperController {
 
     //  Als Entwickler in einem Projekt kann ich aufgewendete Zeiten für eine Aufgabe buchen (diese Buchung gilt pro Aufgabe und Entwickler, außerdem kann ein Entwickler mehrmals Zeiten buchen, wenn die Bearbeitung beispielsweise mehrere Tage dauert)
     @PostMapping("/bookTime")
-    public String bookTime(@RequestParam("taskId") Long taskId, @RequestParam("projectId") Long projectId, @RequestParam("date") String date, @RequestParam("time") double time) {
-        bookingService.bookTime(taskId, projectId, time, date);
+    public String bookTime(@RequestParam("taskId") Long taskId, @RequestParam("projectId") Long projectId, @RequestParam("date") String date, @RequestParam("time") int time) {
+        bookingService.bookTime(taskId, projectId, time, date, userService.findCurrentUser());
         return "redirect:/userDeveloper/viewTask/"+taskId;
     }
 

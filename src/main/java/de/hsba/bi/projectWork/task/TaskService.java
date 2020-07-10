@@ -89,7 +89,7 @@ public class TaskService {
         taskRepository.save(task);
     }
 
-    public void addNewTask(Task task, Long projectId) {
+    public Task addNewTask(Task task, Long projectId) {
         // TODO Als Entwickler in einem Projekt kann ich eine Aufgabe zu diesem Projekt hinzufügen, diese beinhaltet wenigstens einen Titel und eine Beschreibung
         Project project = projectService.findById(projectId);
         if (checkStatusValidity(task) && project != null) {
@@ -102,6 +102,7 @@ public class TaskService {
         else {
             // TODO throw an expection
         }
+        return task;
     }
 
     public void editTask(Long taskId, TaskForm form) {

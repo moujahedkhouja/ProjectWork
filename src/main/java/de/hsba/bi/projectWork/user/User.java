@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import de.hsba.bi.projectWork.project.Project;
 import de.hsba.bi.projectWork.task.Booking;
+import de.hsba.bi.projectWork.task.Task;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,6 +15,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Entity
 @NoArgsConstructor
@@ -53,7 +55,11 @@ public class User implements Comparable<User> {
     @Basic(optional = false)
     private String password;
 
+    @Basic(optional = false)
     private String role;
+
+    /*@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "assignee")
+    private List<Task> assignedTasks;*/
 
     @ManyToMany(cascade = CascadeType.ALL)
     @OrderBy

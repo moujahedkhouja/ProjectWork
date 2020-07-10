@@ -23,17 +23,19 @@ public class Booking {
     @GeneratedValue
     @Setter(AccessLevel.NONE)
     Long id;
+    LocalDate date;
+    int timeSpent;
+
     @ManyToOne(optional = false)
     User user;
-    LocalDate date;
-    Double timeSpent;
+
     @ManyToOne(optional = false)
     private Task task;
 
     @ManyToOne(optional = false)
     private Project project;
 
-    public Booking(User user, LocalDate date, Double timeSpent) {
+    public Booking(User user, LocalDate date, int timeSpent) {
         this.user = user;
         this.date = date;
         this.timeSpent = timeSpent;

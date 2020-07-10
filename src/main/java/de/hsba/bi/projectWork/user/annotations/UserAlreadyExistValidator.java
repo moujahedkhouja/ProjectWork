@@ -1,6 +1,6 @@
 package de.hsba.bi.projectWork.user.annotations;
 
-import de.hsba.bi.projectWork.user.RegisterUserForm;
+import de.hsba.bi.projectWork.web.user.RegisterUserForm;
 import de.hsba.bi.projectWork.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 

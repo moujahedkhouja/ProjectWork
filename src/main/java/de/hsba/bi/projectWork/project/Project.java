@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,11 +31,11 @@ public class Project {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "project")
     @OrderBy
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "project")
     @OrderBy
-    private List<Booking> bookedTimes;
+    private List<Booking> bookedTimes =  new ArrayList<>();
 
     @Transient
     private transient double usersTimeSpentInProject;

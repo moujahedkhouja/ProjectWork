@@ -1,11 +1,11 @@
 package de.hsba.bi.projectWork.web;
 
-import de.hsba.bi.projectWork.user.ChangePasswordForm;
+import de.hsba.bi.projectWork.web.user.ChangePasswordForm;
 import de.hsba.bi.projectWork.user.User;
 import de.hsba.bi.projectWork.user.UserService;
 import de.hsba.bi.projectWork.web.exception.IncorrectPasswordException;
 import de.hsba.bi.projectWork.web.exception.UserAlreadyExistException;
-import de.hsba.bi.projectWork.user.RegisterUserForm;
+import de.hsba.bi.projectWork.web.user.RegisterUserForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -59,7 +59,7 @@ public class IndexController {
     public String register(@ModelAttribute("user") @Valid RegisterUserForm userForm, BindingResult bindingResult, Model model) {
         if (!bindingResult.hasErrors()) {
             try {
-                User registered = userService.createUser(userForm);
+                User registered = userService.createUser(userForm, "DEVELOPER");
                 model.addAttribute("user", userForm);
                 model.addAttribute("message", "You've successfully registered.");
                 return "login";

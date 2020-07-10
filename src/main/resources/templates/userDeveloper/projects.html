@@ -13,14 +13,13 @@ Find a more elegant way to add a task
 <header th:insert="fragments/header"></header>
 <body>
 
-
-<main role="main">
+<div class="wrapper">
 
     <div class="container marketing">
 
         <!--Section for developers-->
         <div sec:authorize="hasRole('DEVELOPER')">
-            <h1>Projects</h1>
+            <h1>Projects</h1><br>
             <div class="form-group">
                 <div th:if="${projects != null}" id="accordion">
                     <div th:each="project : ${projects}">
@@ -31,13 +30,15 @@ Find a more elegant way to add a task
                                     </button>
                                 </h5>
                             </div>
-                            <div id='collapse_' class='collapse show' aria-labelledby='headingOne' data-parent='#accordion'>
+                            <div id='collapse_' class='collapse' aria-labelledby='headingOne' data-parent='#accordion'>
                                 <div class='card-body'>
                                     <h4>Tasks in this project</h4>
-                                    <table th:if="${project.tasks != null}" class="table">
+                                    <div th:if="${project.tasks.size() > 0}">
+                                        <table class="table">
                                         <tr>
                                             <th>Name</th>
                                             <th>Status</th>
+                                            <th>Assignee</th>
                                             <th>Estimation</th>
                                             <th>Time spent on task</th>
                                         </tr>
@@ -46,6 +47,10 @@ Find a more elegant way to add a task
                                                 <a th:href="@{'/userDeveloper/viewTask/' + ${task.id}}" th:text="${task.name}"></a>
                                             </td>
                                             <td th:text="${task.status}"></td>
+                                            <td>
+                                                <!--<div th:if="${task.assignee != null}" th:text="${task.assignee}"></div>
+                                                <div th:if="${task.assignee == null}" th:text="'This task doen´t have an assignee yet!'"></div>-->
+                                            </td>
                                             <td th:text="${task.estimation}"></td>
                                             <td th:text="${task.totalTime}"></td>
                                         </tr>
@@ -66,9 +71,12 @@ Find a more elegant way to add a task
                                             <td></td>
                                             <td></td>
                                         </tr>
-                                    </table>
-                                    <br>
-                                    <div th:text="'You already spent ' + ${project.usersTimeSpentInProject} + ' hours on this project.'"></div>
+                                    </table><br>
+                                        <div th:text="'You already spent ' + ${project.usersTimeSpentInProject} + ' hours on this project.'"></div>
+                                    </div>
+                                    <div th:if="${project.tasks.size() == 0}">
+                                        <div><br>There are no tasks assigned to this project yet!</div>
+                                    </div>
                                     <br><br>
                                 </div>
                             </div>
@@ -81,9 +89,10 @@ Find a more elegant way to add a task
 
     </div><!-- /.container -->
 
-    <!-- FOOTER -->
-    <footer th:insert="fragments/footer"></footer>
-</main>
+</div>
+
+<!-- FOOTER -->
+<footer th:insert="fragments/footer"></footer>
 
 </body>
 </html>

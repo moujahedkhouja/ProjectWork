@@ -5,12 +5,12 @@ Optimize the  "Create New Project"-Form
 
 
 <!doctype html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <header th:insert="fragments/header"></header>
 <body>
 
 
-<main role="main">
+<div class="wrapper">
 
     <div class="container marketing">
 
@@ -135,13 +135,12 @@ Optimize the  "Create New Project"-Form
             </form>
             <br><br><br><br><br>
         </div>
-        <br><br><br><br><br>
 
     </div><!-- /.container -->
 
     <!-- FOOTER -->
     <footer th:insert="fragments/footer"></footer>
-</main>
+</div>
 
 </body>
 </html>

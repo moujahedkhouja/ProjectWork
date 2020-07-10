@@ -21,10 +21,10 @@
                                     </button>
                                 </h5>
                             </div>
-                            <div th:id="'collapse'+${project.getId()}" class='collapse show' aria-labelledby='headingOne' data-parent='#accordion'>
+                            <div th:id="'collapse'+${project.getId()}" class='collapse' aria-labelledby='headingOne' data-parent='#accordion'>
                                 <div class='card-body'>
                                     <h4>Tasks in this project</h4>
-                                    <table th:if="${project.tasks != null}" class="table">
+                                    <table th:if="${project.tasks.size() > 0}" class="table">
                                         <tr>
                                             <th>Name</th>
                                             <th>Status</th>
@@ -39,7 +39,9 @@
                                             <td th:text="${task.estimation}"></td>
                                             <td th:text="${task.totalTime}"></td>
                                     </table>
-                                    <br><br><br>
+                                    <div th:if="${project.tasks.size() == 0}">
+                                        <div><br>There are no tasks assigned to this project yet!</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

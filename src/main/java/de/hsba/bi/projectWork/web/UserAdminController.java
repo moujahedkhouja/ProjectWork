@@ -1,19 +1,14 @@
-package de.hsba.bi.projectWork.web.user;
+package de.hsba.bi.projectWork.web;
 
 import de.hsba.bi.projectWork.project.Project;
 import de.hsba.bi.projectWork.project.ProjectService;
-import de.hsba.bi.projectWork.user.User;
 import de.hsba.bi.projectWork.user.UserService;
 import de.hsba.bi.projectWork.web.project.UpdateProjectForm;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.sql.Update;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Controller
@@ -73,7 +68,7 @@ public class UserAdminController {
     // Als Admin kann ich ein neues Projekt anlegen
     @PostMapping("/createNewProject")
     public String createNewProject(@ModelAttribute("project") Project project) {
-        projectService.save(project);
+        projectService.createNewProject(project);
         return "redirect:/userAdmin/projects";
     }
 }

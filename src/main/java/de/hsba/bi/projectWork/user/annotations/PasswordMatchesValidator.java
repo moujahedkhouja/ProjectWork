@@ -1,7 +1,7 @@
 package de.hsba.bi.projectWork.user.annotations;
 
-import de.hsba.bi.projectWork.user.ChangePasswordForm;
-import de.hsba.bi.projectWork.user.RegisterUserForm;
+import de.hsba.bi.projectWork.web.user.ChangePasswordForm;
+import de.hsba.bi.projectWork.web.user.RegisterUserForm;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

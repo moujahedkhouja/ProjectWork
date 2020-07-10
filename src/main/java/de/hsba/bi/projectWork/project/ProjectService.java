@@ -21,6 +21,11 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final UserService userService;
 
+    public Project createNewProject(Project project) {
+        // TODO Als Admin kann ich ein neues Projekt anlegen
+        return projectRepository.save(project);
+    }
+
     public List<Project> findAll() {
         return projectRepository.findAll();
     }
@@ -28,13 +33,6 @@ public class ProjectService {
     public Project findById(Long id) {
         Optional<Project> project = projectRepository.findById(id);
         return project.orElse(null);
-    }
-
-    public List<User> findUsersNotInProject(Long projectId) {
-        Project project = this.findById(projectId);
-        List<User> usersNotInProject = new ArrayList<User>(userService.findAll());
-        usersNotInProject.removeAll(project.getMembers());
-        return usersNotInProject;
     }
 
     public List<Project> findUsersProjects() {
@@ -65,9 +63,11 @@ public class ProjectService {
         return usersProjects;
     }
 
-    public void save(Project project) {
-        // TODO Als Admin kann ich ein neues Projekt anlegen
-        projectRepository.save(project);
+    public List<User> findUsersNotInProject(Long projectId) {
+        Project project = this.findById(projectId);
+        List<User> usersNotInProject = new ArrayList<User>(userService.findAll());
+        usersNotInProject.removeAll(project.getMembers());
+        return usersNotInProject;
     }
 
     public void addUserToProject(UpdateProjectForm updateProjectForm, Long projectId) {
@@ -82,7 +82,7 @@ public class ProjectService {
                 newUser.getProjects().add(project);
                 userService.save(newUser);
             }
-            this.save(project);
+            this.createNewProject(project);
         }
     }
 
@@ -98,7 +98,7 @@ public class ProjectService {
                 newUser.getProjects().remove(project);
                 userService.save(newUser);
             }
-            this.save(project);
+            this.createNewProject(project);
         }
     }
 

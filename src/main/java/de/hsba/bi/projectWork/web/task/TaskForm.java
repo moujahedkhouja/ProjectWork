@@ -24,10 +24,10 @@ public class TaskForm {
     private String status;
 
     @NotNull(message = "Please enter an estimation.")
-    private double estimation;
+    private int estimation;
 
     List<Booking> times;
-    private double totalTime;
+    private int totalTime;
     private Project project;
 
 }

@@ -22,7 +22,6 @@ public class BookingService {
 
     private final BookingRepository bookingRepository;
     private final ProjectService projectService;
-    private final UserService userService;
     private final ProjectRepository projectRepository;
     private final TaskRepository taskRepository;
     private final TaskService taskService;
@@ -33,14 +32,14 @@ public class BookingService {
         return booking.orElse(null);
     }
 
-    public void bookTime(Long taskId, Long projectId, double timeSpent, String date) {
+    public void bookTime(Long taskId, Long projectId, int timeSpent, String date, User user) {
         // TODO Als Entwickler in einem Projekt kann ich aufgewendete Zeiten für eine Aufgabe buchen (diese Buchung gilt pro Aufgabe und Entwickler, außerdem kann ein Entwickler mehrmals Zeiten buchen, wenn die Bearbeitung beispielsweise mehrere Tage dauert)
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate localDate = LocalDate.parse(date, dateTimeFormatter);
 
         Project project = projectService.findById(projectId);
         Task task = taskService.findById(taskId);
-        Booking booking = new Booking(userService.findCurrentUser(), localDate, timeSpent);
+        Booking booking = new Booking(user, localDate, timeSpent);
 
         booking.setTask(task);
         booking.setProject(project);

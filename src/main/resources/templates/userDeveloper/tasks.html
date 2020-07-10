@@ -18,8 +18,7 @@ https://www.youtube.com/watch?v=JAADtLFJJgs
 <header th:insert="fragments/header"></header>
 <body>
 
-
-<main role="main">
+<div class="wrapper">
 
     <div class="container marketing">
 
@@ -70,14 +69,19 @@ https://www.youtube.com/watch?v=JAADtLFJJgs
                         </div>-->
                     </div>
                 </div>
-                <div th:each="task : ${tasks}" class="row mx-lg-n5">
-                    <div th:text="${task.name}" class="col py-3"></div>
-                    <div th:text="${task.project.getName()}" class="col py-3"></div>
-                    <div th:text="${task.status}" class="col py-3"></div>
+                <div th:if="${tasks.size() == 0}" class="row mx-lg-n5">
+                        <div th:text="'There are no tasks with this status'" class="col"></div>
+                </div>
+                <div th:if="${tasks.size() > 0}">
+                    <div th:each="task : ${tasks}" class="row mx-lg-n5">
+                        <div th:text="${task.name}" class="col py-3"></div>
+                        <div th:text="${task.project.getName()}" class="col py-3"></div>
+                        <div th:text="${task.status}" class="col py-3"></div>
+                    </div>
                 </div>
             </div>
             <!--<script>
-                $(".dropdown-menu li a").click(function(){
+                $(".dropdown-menu div a").click(function(){
                     $(this).parents(".btn-group").find('.selection').text($(this).text());
                     $(this).parents(".btn-group").find('.selection').val($(this).text());
                 });
@@ -88,9 +92,10 @@ https://www.youtube.com/watch?v=JAADtLFJJgs
 
     </div><!-- /.container -->
 
-    <!-- FOOTER -->
-    <footer th:insert="fragments/footer"></footer>
-</main>
+</div>
+
+<!-- FOOTER -->
+<footer th:insert="fragments/footer"></footer>
 
 </body>
 </html>

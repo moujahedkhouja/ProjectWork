@@ -1,7 +1,7 @@
-package de.hsba.bi.projectWork.user;
+package de.hsba.bi.projectWork.web.user;
 
+import de.hsba.bi.projectWork.user.annotations.OldPasswordIsCorrect;
 import de.hsba.bi.projectWork.user.annotations.PasswordMatches;
-import de.hsba.bi.projectWork.user.annotations.UserAlreadyExist;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,13 +13,10 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @PasswordMatches
-@UserAlreadyExist
-public class RegisterUserForm {
+@OldPasswordIsCorrect
+public class ChangePasswordForm {
 
-    @NotEmpty(message = "Please enter a username.")
-    @NotNull(message = "Please enter a username.")
-    @Size(min = 3, message = "Your username has to be at least 3 characters long.")
-    private String name;
+    private String oldPassword;
 
     @NotEmpty(message = "Please enter a password.")
     @NotNull(message = "Please confirm your password.")

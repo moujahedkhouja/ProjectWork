@@ -1,4 +1,4 @@
-package de.hsba.bi.projectWork.web.user;
+package de.hsba.bi.projectWork.web;
 
 import de.hsba.bi.projectWork.project.ProjectService;
 import de.hsba.bi.projectWork.task.Booking;

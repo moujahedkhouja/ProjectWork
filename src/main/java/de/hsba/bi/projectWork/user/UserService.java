@@ -7,6 +7,8 @@ import javax.transaction.Transactional;
 
 import de.hsba.bi.projectWork.web.exception.IncorrectPasswordException;
 import de.hsba.bi.projectWork.web.exception.UserAlreadyExistException;
+import de.hsba.bi.projectWork.web.user.ChangePasswordForm;
+import de.hsba.bi.projectWork.web.user.RegisterUserForm;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,44 +17,24 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserService { //implements IUserService
+public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
 
-    /*public void init() {
-        createUser("timo", "timospassword", User.ADMIN_ROLE);
-        createUser("ina", "inaspassword", User.ADMIN_ROLE);
-        createUser("greta", "gretaspassword", User.ADMIN_ROLE);
-
-        createUser("Anne", "123456", User.DEVELOPER_ROLE);
-        createUser("Benedikt", "123456", User.DEVELOPER_ROLE);
-        createUser("Charlotte", "123456", User.DEVELOPER_ROLE);
-        createUser("Xenia", "123456", User.DEVELOPER_ROLE);
-        createUser("Yves", "123456", User.DEVELOPER_ROLE);
-        createUser("Zoe", "123456", User.DEVELOPER_ROLE);
-
-        createUser("Karl", "123456", User.MANAGER_ROLE);
-        createUser("Johanna", "123456", User.MANAGER_ROLE);
-        createUser("Tina", "123456", User.MANAGER_ROLE);
-    }*/
-
     public void save(User user) {
         userRepository.save(user);
     }
 
-
-    // @Transactional
-    // @Override
-    public User createUser(RegisterUserForm userForm) throws UserAlreadyExistException {
+    public User createUser(RegisterUserForm userForm, String role) throws UserAlreadyExistException {
         if (usernameExists(userForm.getName())) {
             throw new UserAlreadyExistException("There is an account with the username: " + userForm.getName());
         }
         User user = new User();
         user.setName(userForm.getName());
         user.setPassword(passwordEncoder.encode(userForm.getPassword()));
-        user.setRole("DEVELOPER");
+        user.setRole(role);
         this.save(user);
         return user;
     }

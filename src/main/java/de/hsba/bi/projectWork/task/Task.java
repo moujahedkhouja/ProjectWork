@@ -1,6 +1,7 @@
 package de.hsba.bi.projectWork.task;
 
 import de.hsba.bi.projectWork.project.Project;
+import de.hsba.bi.projectWork.user.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,13 +19,16 @@ public class Task {
     private Long id;
     private String name;
     private String description;
-    private double estimation;
-    private double totalTime;
+    private int estimation;
+    private int totalTime;
     private String status;
     //private Enum<Status> status;
 
+    /*@ManyToOne(optional = false)
+    private User assignee;*/
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "task")
-    List<Booking> times;
+    private List<Booking> times;
 
     @ManyToOne(optional = false)
     private Project project;
@@ -47,14 +51,22 @@ public class Task {
         }
     }
 
-    public double calcTotalTime() {
-        double sum = 0;
+    public int calcTotalTime() {
+        int sum = 0;
         for (int i = 0; i<this.times.size(); i++) {
-            double time = this.times.get(i).timeSpent;
+            int time = this.times.get(i).timeSpent;
             sum = sum + time;
         }
         this.setTotalTime(sum);
         return sum;
+    }
+
+
+    public Task (String name, String description, int estimation, String status) {
+        this.name = name;
+        this.description = description;
+        this.estimation = estimation;
+        this.status = status;
     }
 
 }
