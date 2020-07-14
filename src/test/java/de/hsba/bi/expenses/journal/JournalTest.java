@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import de.hsba.bi.projectWork.user.User;
+import de.hsba.bi.projectwork.user.User;
 
 public class JournalTest {
 

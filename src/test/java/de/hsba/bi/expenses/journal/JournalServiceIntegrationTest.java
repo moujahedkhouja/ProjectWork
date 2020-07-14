@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import de.hsba.bi.projectWork.user.User;
+import de.hsba.bi.projectwork.user.User;
 
 @SpringBootTest
 @Transactional
